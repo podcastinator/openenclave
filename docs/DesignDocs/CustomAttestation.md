@@ -734,6 +734,17 @@ oe_result_t oe_verify_evidence(
     size_t* claims_length);
 
 /**
+ * oe_free_claims_list
+ *
+ * Frees a claims list.
+ *
+ * @param[in] claims The list of claims.
+ * @param[in] claims_length The length of the claims list.
+ * @retval OE_OK on success.
+ */
+oe_result_t oe_free_claims_list(oe_claim_t* claims, size_t claims_length);
+
+/**
  * oe_get_registered_attester_format_ids
  *
  * Get the unique identifiers of all registered attesters.
