@@ -8,6 +8,8 @@
 #include <openenclave/internal/raise.h>
 #include <openenclave/internal/report.h>
 #include <openenclave/internal/utils.h>
+
+#include <pthread.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -195,6 +197,86 @@ oe_result_t oe_unregister_attester(oe_attester_t* plugin)
 oe_result_t oe_unregister_verifier(oe_verifier_t* plugin)
 {
     return _unregister_plugin(&verifiers, (oe_attestation_role_t*)plugin);
+}
+
+static oe_result_t _get_registered_plugin_format_ids(
+    struct plugin_list_node_t* list,
+    oe_uuid_t** format_ids,
+    size_t* format_ids_length)
+{
+    oe_result_t result = OE_UNEXPECTED;
+    struct plugin_list_node_t* node = NULL;
+    size_t number_of_nodes = 0;
+    oe_uuid_t* ids = NULL;
+
+    if (!format_ids || !format_ids_length)
+        OE_RAISE(OE_INVALID_PARAMETER);
+
+    *format_ids = NULL;
+    *format_ids_length = 0;
+
+    if (!list)
+        OE_RAISE(OE_NOT_FOUND);
+
+    // Calculate number of nodes
+    node = list;
+    while (node != NULL)
+    {
+        number_of_nodes++;
+        node = node->next;
+    }
+
+    // Allocate memory
+    ids = (oe_uuid_t*)oe_calloc(number_of_nodes, sizeof(oe_uuid_t));
+    if (ids == NULL)
+    {
+        OE_RAISE_MSG(
+            OE_OUT_OF_MEMORY,
+            "Out of memory while getting registered plugins.",
+            NULL);
+    }
+
+    // Copy format ids
+    node = list;
+    for (size_t n = 0; n < number_of_nodes; n++)
+    {
+        memcpy(&ids[n], &node->plugin->format_id, sizeof(oe_uuid_t));
+        node = node->next;
+    }
+
+    *format_ids = ids;
+    *format_ids_length = number_of_nodes;
+    ids = NULL;
+
+    result = OE_OK;
+
+done:
+    OE_TRACE_INFO(
+        "Exit call %s: %d(%s)\n", __FUNCTION__, result, oe_result_str(result));
+
+    return result;
+}
+
+oe_result_t oe_get_registered_attester_format_ids(
+    oe_uuid_t** format_ids,
+    size_t* format_ids_length)
+{
+    return _get_registered_plugin_format_ids(
+        attesters, format_ids, format_ids_length);
+}
+
+oe_result_t oe_get_registered_verifier_format_ids(
+    oe_uuid_t** format_ids,
+    size_t* format_ids_length)
+{
+    return _get_registered_plugin_format_ids(
+        verifiers, format_ids, format_ids_length);
+}
+
+oe_result_t oe_free_format_ids(oe_uuid_t* format_ids)
+{
+    oe_free(format_ids);
+    return OE_OK;
 }
 
 static oe_result_t _wrap_with_header(

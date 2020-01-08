@@ -294,6 +294,42 @@ oe_result_t oe_unregister_attester(oe_attester_t* plugin);
 oe_result_t oe_unregister_verifier(oe_verifier_t* plugin);
 
 /**
+ * oe_get_registered_attester_format_ids
+ *
+ * Get the unique identifiers of all registered attesters.
+ *
+ * @param[out] format_ids The list of the UUIDs of the registered attesters.
+ * @param[out] format_ids_length The length of the UUIDs list.
+ * @retval OE_OK on success.
+ */
+oe_result_t oe_get_registered_attester_format_ids(
+    oe_uuid_t** format_ids,
+    size_t* format_ids_length);
+
+/**
+ * oe_get_registered_verifier_format_ids
+ *
+ * Get the unique identifiers of all registered verifiers.
+ *
+ * @param[out] format_ids The list of the UUIDs of the registered verifiers.
+ * @param[out] format_ids_length The length of the UUIDs list.
+ * @retval OE_OK on success.
+ */
+oe_result_t oe_get_registered_verifier_format_ids(
+    oe_uuid_t** format_ids,
+    size_t* format_ids_length);
+
+/**
+ * oe_free_format_ids
+ *
+ * Frees the attester/verifier format ids.
+ *
+ * @param[in] format_ids The list of the attester/verifier UUIDs.
+ * @retval OE_OK on success.
+ */
+oe_result_t oe_free_format_ids(oe_uuid_t* format_ids);
+
+/**
  * oe_get_evidence
  *
  * Generates the attestation evidence for the given UUID attestation format.
