@@ -9,7 +9,6 @@
 #include <openenclave/internal/report.h>
 #include <openenclave/internal/utils.h>
 
-#include <pthread.h>
 #include <stdio.h>
 #include <string.h>
 
