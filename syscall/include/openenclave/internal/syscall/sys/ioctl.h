@@ -6,8 +6,6 @@
 
 #include <openenclave/bits/defs.h>
 #include <openenclave/bits/types.h>
-#include <stdarg.h>
-#include <sys/ioctl.h>
 
 OE_EXTERNC_BEGIN
 

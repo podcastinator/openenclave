@@ -10,7 +10,7 @@ OE_EXTERNC_BEGIN
 
 struct oe_timespec
 {
-    time_t tv_sec;
+    oe_time_t tv_sec;
     long tv_nsec;
 };
 

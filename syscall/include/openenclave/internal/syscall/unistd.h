@@ -7,8 +7,6 @@
 #include <openenclave/bits/defs.h>
 #include <openenclave/internal/syscall/bits/types.h>
 #include <openenclave/internal/syscall/unistd.h>
-#include <stdarg.h>
-#include <unistd.h>
 
 OE_EXTERNC_BEGIN
 
@@ -16,7 +14,7 @@ int oe_access(const char* pathname, int mode);
 
 int oe_access_d(uint64_t devid, const char* pathname, int mode);
 
-void* oe_sbrk(intptr_t increment);
+void* oe_sbrk(oe_intptr_t increment);
 
 ssize_t oe_read(int fd, void* buf, size_t count);
 
@@ -24,11 +22,11 @@ ssize_t oe_write(int fd, const void* buf, size_t count);
 
 #if !defined(WIN32) /* __feature_io__ */
 
-off_t oe_lseek(int fd, off_t offset, int whence);
+oe_off_t oe_lseek(int fd, oe_off_t offset, int whence);
 
-int oe_truncate(const char* path, off_t length);
+int oe_truncate(const char* path, oe_off_t length);
 
-int oe_truncate_d(uint64_t devid, const char* path, off_t length);
+int oe_truncate_d(uint64_t devid, const char* path, oe_off_t length);
 
 #endif /* !defined(WIN32) */
 
@@ -60,23 +58,23 @@ int oe_dup(int fd);
 
 int oe_dup2(int fd, int newfd);
 
-pid_t oe_getpid(void);
+oe_pid_t oe_getpid(void);
 
-pid_t oe_getppid(void);
+oe_pid_t oe_getppid(void);
 
-pid_t oe_getpgrp(void);
+oe_pid_t oe_getpgrp(void);
 
-uid_t oe_getuid(void);
+oe_uid_t oe_getuid(void);
 
-uid_t oe_geteuid(void);
+oe_uid_t oe_geteuid(void);
 
-gid_t oe_getgid(void);
+oe_gid_t oe_getgid(void);
 
-gid_t oe_getegid(void);
+oe_gid_t oe_getegid(void);
 
-pid_t oe_getpgid(pid_t pid);
+oe_pid_t oe_getpgid(oe_pid_t pid);
 
-int oe_getgroups(int size, gid_t list[]);
+int oe_getgroups(int size, oe_gid_t list[]);
 
 OE_EXTERNC_END
 

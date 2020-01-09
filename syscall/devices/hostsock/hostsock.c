@@ -19,6 +19,9 @@
 #include <openenclave/bits/safecrt.h>
 #include <openenclave/syscall/module.h>
 #include <pthread.h>
+#include <sys/socket.h>
+#include <fcntl.h>
+#include <limits.h>
 #include <openenclave/internal/syscall/bits/exports.h>
 #include "syscall_t.h"
 

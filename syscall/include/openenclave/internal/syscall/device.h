@@ -73,8 +73,11 @@ typedef struct _oe_fs_device_ops
 
     int (*umount2)(oe_device_t* fs, const char* target, int flags);
 
-    oe_fd_t* (
-        *open)(oe_device_t* fs, const char* pathname, int flags, mode_t mode);
+    oe_fd_t* (*open)(
+        oe_device_t* fs,
+        const char* pathname,
+        int flags,
+        oe_mode_t mode);
 
     int (*stat)(oe_device_t* fs, const char* pathname, struct oe_stat* buf);
 
@@ -86,9 +89,9 @@ typedef struct _oe_fs_device_ops
 
     int (*rename)(oe_device_t* fs, const char* oldpath, const char* newpath);
 
-    int (*truncate)(oe_device_t* fs, const char* path, off_t length);
+    int (*truncate)(oe_device_t* fs, const char* path, oe_off_t length);
 
-    int (*mkdir)(oe_device_t* fs, const char* pathname, mode_t mode);
+    int (*mkdir)(oe_device_t* fs, const char* pathname, oe_mode_t mode);
 
     int (*rmdir)(oe_device_t* fs, const char* pathname);
 
@@ -190,7 +193,7 @@ int oe_device_table_remove(uint64_t devid);
  * For example:
  *
  *     ```
- *     int open_sgxfs(const char *pathname, int flags, mode_t mode)
+ *     int open_sgxfs(const char *pathname, int flags, oe_mode_t mode)
  *     {
  *         if (oe_set_thread_devid(OE_DEVID_SGX_FILE_SYSTEM) != OE_OK)
  *         {

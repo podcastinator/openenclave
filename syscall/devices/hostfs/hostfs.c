@@ -38,6 +38,9 @@
 #include <openenclave/internal/syscall/bits/exports.h>
 #include <pthread.h>
 #include <string.h>
+#include <limits.h>
+#include <fcntl.h>
+#include <sys/mount.h>
 
 #include "syscall_t.h"
 

@@ -16,6 +16,9 @@
 #include <pthread.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <dirent.h>
+#include <sys/stat.h>
 
 #define MAX_MOUNT_TABLE_SIZE 64
 

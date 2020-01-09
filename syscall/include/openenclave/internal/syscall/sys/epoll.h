@@ -8,7 +8,6 @@
 #include <openenclave/bits/types.h>
 #include <openenclave/internal/syscall/sys/bits/sigset.h>
 #include <openenclave/internal/types.h>
-#include <sys/epoll.h>
 
 OE_EXTERNC_BEGIN
 

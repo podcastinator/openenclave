@@ -4,8 +4,7 @@
 #ifndef _OE_SYSCALL_RESOLVER_H
 #define _OE_SYSCALL_RESOLVER_H
 
-#include <errno.h>
-#include <openenclave/bits/types.h>
+#include <openenclave/internal/syscall/bits/types.h>
 #include <openenclave/internal/syscall/netdb.h>
 
 OE_EXTERNC_BEGIN
@@ -30,11 +29,11 @@ typedef struct _oe_resolver_ops
     int (*getnameinfo)(
         oe_resolver_t* resolver,
         const struct oe_sockaddr* sa,
-        socklen_t salen,
+        oe_socklen_t salen,
         char* host,
-        socklen_t hostlen,
+        oe_socklen_t hostlen,
         char* serv,
-        socklen_t servlen,
+        oe_socklen_t servlen,
         int flags);
 
     int (*release)(oe_resolver_t* resolver);

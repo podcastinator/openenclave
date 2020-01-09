@@ -1,6 +1,8 @@
 // Copyright (c) Open Enclave SDK contributors.
 // Licensed under the MIT License.
 
+#include <errno.h>
+#include <netdb.h>
 #include <openenclave/internal/syscall/bits/exports.h>
 #include <openenclave/internal/syscall/netdb.h>
 #include <openenclave/internal/syscall/raise.h>
@@ -102,11 +104,11 @@ done:
 
 int oe_getnameinfo(
     const struct oe_sockaddr* sa,
-    socklen_t salen,
+    oe_socklen_t salen,
     char* host,
-    socklen_t hostlen,
+    oe_socklen_t hostlen,
     char* serv,
-    socklen_t servlen,
+    oe_socklen_t servlen,
     int flags)
 {
     ssize_t ret = EAI_FAIL;

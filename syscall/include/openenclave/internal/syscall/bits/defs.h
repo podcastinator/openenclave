@@ -4,8 +4,6 @@
 #ifndef _OE_SYSCALL_BITS_DEFS_H
 #define _OE_SYSCALL_BITS_DEFS_H
 
-#include <assert.h>
-#include <features.h>
 #include <openenclave/bits/defs.h>
 #include <openenclave/bits/types.h>
 

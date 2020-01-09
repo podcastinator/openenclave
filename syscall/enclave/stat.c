@@ -1,6 +1,7 @@
 // Copyright (c) Open Enclave SDK contributors.
 // Licensed under the MIT License.
 
+#include <errno.h>
 #include <openenclave/internal/syscall/device.h>
 #include <openenclave/internal/syscall/raise.h>
 #include <openenclave/internal/syscall/sys/stat.h>
@@ -43,7 +44,7 @@ done:
     return ret;
 }
 
-int oe_mkdir(const char* pathname, mode_t mode)
+int oe_mkdir(const char* pathname, oe_mode_t mode)
 {
     int ret = -1;
     oe_device_t* fs = NULL;
@@ -58,7 +59,7 @@ done:
     return ret;
 }
 
-int oe_mkdir_d(uint64_t devid, const char* pathname, mode_t mode)
+int oe_mkdir_d(uint64_t devid, const char* pathname, oe_mode_t mode)
 {
     int ret = -1;
 

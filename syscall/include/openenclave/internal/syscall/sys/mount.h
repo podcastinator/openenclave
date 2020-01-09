@@ -6,7 +6,6 @@
 
 #include <openenclave/bits/defs.h>
 #include <openenclave/bits/types.h>
-#include <sys/mount.h>
 
 OE_EXTERNC_BEGIN
 

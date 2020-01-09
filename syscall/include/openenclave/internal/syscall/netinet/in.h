@@ -4,7 +4,6 @@
 #ifndef _OE_SYSCALL_NETINET_IN_H
 #define _OE_SYSCALL_NETINET_IN_H
 
-#include <netinet/in.h>
 #include <openenclave/bits/defs.h>
 #include <openenclave/internal/syscall/bits/types.h>
 
@@ -17,7 +16,7 @@ OE_EXTERNC_BEGIN
 
 struct oe_in_addr
 {
-    in_addr_t s_addr;
+    oe_in_addr_t s_addr;
 };
 
 #define __OE_IN6_ADDR oe_in6_addr

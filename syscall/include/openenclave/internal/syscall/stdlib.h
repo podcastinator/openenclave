@@ -4,8 +4,6 @@
 #ifndef _OE_SYSCALL_STDLIB_H
 #define _OE_SYSCALL_STDLIB_H
 
-#include <features.h>
-#include <limits.h>
 #include <openenclave/bits/defs.h>
 #include <openenclave/bits/types.h>
 #include <openenclave/internal/syscall/bits/defs.h>
@@ -14,7 +12,7 @@ OE_EXTERNC_BEGIN
 
 typedef struct _oe_syscall_path
 {
-    char buf[PATH_MAX];
+    char buf[4096];
 } oe_syscall_path_t;
 
 char* oe_realpath(const char* path, oe_syscall_path_t* resolved_path);

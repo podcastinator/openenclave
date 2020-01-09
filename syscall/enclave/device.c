@@ -3,6 +3,7 @@
 
 #include <openenclave/enclave.h>
 
+#include <errno.h>
 #include <openenclave/bits/safecrt.h>
 #include <openenclave/internal/syscall/bits/exports.h>
 #include <openenclave/internal/syscall/device.h>

@@ -4,31 +4,31 @@
 // clang-format off
 struct __OE_STAT
 {
-    dev_t st_dev;               /* (0) */
-    ino_t st_ino;            /* (8) */
-    nlink_t st_nlink;        /* (16) */
-    mode_t st_mode;          /* (24) */
-    uid_t st_uid;            /* (28) */
-    gid_t st_gid;            /* (32) */
+    oe_dev_t st_dev;               /* (0) */
+    oe_ino_t st_ino;            /* (8) */
+    oe_nlink_t st_nlink;        /* (16) */
+    oe_mode_t st_mode;          /* (24) */
+    oe_uid_t st_uid;            /* (28) */
+    oe_gid_t st_gid;            /* (32) */
     uint32_t __st_pad0;         /* (36) */
-    dev_t st_rdev;           /* (40) */
-    off_t st_size;           /* (48) */
-    blksize_t st_blksize;    /* (56) */
-    blkcnt_t st_blocks;      /* (64) */
+    oe_dev_t st_rdev;           /* (40) */
+    oe_off_t st_size;           /* (48) */
+    oe_blksize_t st_blksize;    /* (56) */
+    oe_blkcnt_t st_blocks;      /* (64) */
     struct
     {
-        time_t tv_sec;          /* (72) */
-        suseconds_t tv_nsec;    /* (80) */
+        oe_time_t tv_sec;          /* (72) */
+        oe_suseconds_t tv_nsec;    /* (80) */
     } st_atim;
     struct
     {
-        time_t tv_sec;          /* (88) */
-        suseconds_t tv_nsec;    /* (96) */
+        oe_time_t tv_sec;          /* (88) */
+        oe_suseconds_t tv_nsec;    /* (96) */
     } st_mtim;
     struct
     {
-        time_t tv_sec;          /* (104) */
-        suseconds_t tv_nsec;    /* (112) */
+        oe_time_t tv_sec;          /* (104) */
+        oe_suseconds_t tv_nsec;    /* (112) */
     } st_ctim;
 };
 // clang-format on

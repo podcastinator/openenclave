@@ -6,6 +6,7 @@
 #include <openenclave/enclave.h>
 #include <pthread.h>
 
+#include <limits.h>
 #include <openenclave/bits/safecrt.h>
 #include <openenclave/internal/syscall/bits/exports.h>
 #include <openenclave/internal/syscall/device.h>
@@ -17,6 +18,7 @@
 #include <openenclave/internal/syscall/sys/ioctl.h>
 #include <openenclave/syscall/module.h>
 #include <pthread.h>
+#include <sys/epoll.h>
 #include "syscall_t.h"
 
 /* The map allocation grows in multiples of the chunk size. */

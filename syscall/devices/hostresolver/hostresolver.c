@@ -19,6 +19,7 @@
 #include <openenclave/syscall/module.h>
 #include <openenclave/internal/syscall/bits/exports.h>
 #include <pthread.h>
+#include <netdb.h>
 #include "syscall_t.h"
 
 #define RESOLV_MAGIC 0x536f636b

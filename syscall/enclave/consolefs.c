@@ -3,6 +3,8 @@
 
 #include <openenclave/enclave.h>
 
+#include <fcntl.h>
+#include <limits.h>
 #include <openenclave/internal/syscall/bits/exports.h>
 #include <openenclave/internal/syscall/fcntl.h>
 #include <openenclave/internal/syscall/fd.h>
@@ -15,6 +17,8 @@
 #include <openenclave/internal/syscall/unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 #include "syscall_t.h"
 
 #define MAGIC 0x0b292bab
@@ -311,9 +315,9 @@ done:
     return ret;
 }
 
-static off_t _consolefs_lseek(oe_fd_t* file_, off_t offset, int whence)
+static oe_off_t _consolefs_lseek(oe_fd_t* file_, oe_off_t offset, int whence)
 {
-    off_t ret = -1;
+    oe_off_t ret = -1;
 
     OE_UNUSED(file_);
     OE_UNUSED(offset);

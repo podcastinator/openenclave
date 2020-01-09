@@ -5,14 +5,14 @@
 #define _OE_SYSCALL_SYS_TIME_H
 
 #include <openenclave/bits/defs.h>
-#include <openenclave/bits/types.h>
+#include <openenclave/internal/syscall/bits/types.h>
 
 OE_EXTERNC_BEGIN
 
 struct oe_timeval
 {
-    time_t tv_sec;       /* seconds */
-    suseconds_t tv_usec; /* microseconds */
+    oe_time_t tv_sec;       /* seconds */
+    oe_suseconds_t tv_usec; /* microseconds */
 };
 
 OE_EXTERNC_END

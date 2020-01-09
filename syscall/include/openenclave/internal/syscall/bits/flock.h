@@ -5,7 +5,7 @@ struct __OE_FLOCK
 {
     short l_type;
     short l_whence;
-    off_t l_start;
-    off_t l_len;
-    pid_t l_pid;
+    oe_off_t l_start;
+    oe_off_t l_len;
+    oe_pid_t l_pid;
 };

@@ -4,7 +4,7 @@
 #ifndef _OE_SYSCALL_NETDB_H_
 #define _OE_SYSCALL_NETDB_H_
 
-#include <netdb.h>
+#include <openenclave/internal/syscall/bits/types.h>
 #include <openenclave/internal/syscall/sys/socket.h>
 
 OE_EXTERNC_BEGIN
@@ -25,11 +25,11 @@ void oe_freeaddrinfo(struct oe_addrinfo* res);
 
 int oe_getnameinfo(
     const struct oe_sockaddr* sa,
-    socklen_t salen,
+    oe_socklen_t salen,
     char* host,
-    socklen_t hostlen,
+    oe_socklen_t hostlen,
     char* serv,
-    socklen_t servlen,
+    oe_socklen_t servlen,
     int flags);
 
 OE_EXTERNC_END

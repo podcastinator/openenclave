@@ -138,7 +138,6 @@ add_library(oecore STATIC
     result.c
     sbrk.c
     arena.c
-    stdio.c
     strerror.c
     string.c
     strtok_r.c

@@ -52,7 +52,7 @@ typedef struct _oe_file_ops
     /* Inherited operations. */
     oe_fd_ops_t fd;
 
-    off_t (*lseek)(oe_fd_t* file, off_t offset, int whence);
+    oe_off_t (*lseek)(oe_fd_t* file, oe_off_t offset, int whence);
 
     int (*getdents64)(oe_fd_t* file, struct oe_dirent* dirp, uint32_t count);
 } oe_file_ops_t;
@@ -66,15 +66,17 @@ typedef struct _oe_socket_ops
     int (*connect)(
         oe_fd_t* sock,
         const struct oe_sockaddr* addr,
-        socklen_t addrlen);
+        oe_socklen_t addrlen);
 
-    oe_fd_t* (
-        *accept)(oe_fd_t* sock, struct oe_sockaddr* addr, socklen_t* addrlen);
+    oe_fd_t* (*accept)(
+        oe_fd_t* sock,
+        struct oe_sockaddr* addr,
+        oe_socklen_t* addrlen);
 
     int (*bind)(
         oe_fd_t* sock,
         const struct oe_sockaddr* addr,
-        socklen_t addrlen);
+        oe_socklen_t addrlen);
 
     int (*listen)(oe_fd_t* sock, int backlog);
 
@@ -88,7 +90,7 @@ typedef struct _oe_socket_ops
         size_t len,
         int flags,
         const struct oe_sockaddr* dest_addr,
-        socklen_t addrlen);
+        oe_socklen_t addrlen);
 
     ssize_t (*recvfrom)(
         oe_fd_t* sock,
@@ -96,7 +98,7 @@ typedef struct _oe_socket_ops
         size_t len,
         int flags,
         const struct oe_sockaddr* src_addr,
-        socklen_t* addrlen);
+        oe_socklen_t* addrlen);
 
     ssize_t (*sendmsg)(oe_fd_t* sock, const struct oe_msghdr* msg, int flags);
 
@@ -109,24 +111,24 @@ typedef struct _oe_socket_ops
         int level,
         int optname,
         void* optval,
-        socklen_t* optlen);
+        oe_socklen_t* optlen);
 
     int (*setsockopt)(
         oe_fd_t* sock,
         int level,
         int optname,
         const void* optval,
-        socklen_t optlen);
+        oe_socklen_t optlen);
 
     int (*getpeername)(
         oe_fd_t* sock,
         struct oe_sockaddr* addr,
-        socklen_t* addrlen);
+        oe_socklen_t* addrlen);
 
     int (*getsockname)(
         oe_fd_t* sock,
         struct oe_sockaddr* addr,
-        socklen_t* addrlen);
+        oe_socklen_t* addrlen);
 } oe_socket_ops_t;
 
 /* epoll operations. */

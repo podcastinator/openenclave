@@ -8,7 +8,6 @@
 #include <openenclave/bits/result.h>
 #include <openenclave/bits/types.h>
 #include <openenclave/edger8r/enclave.h>
-#include <stdarg.h>
 
 /* The syscall layer depends on these non-exported OE symbols. */
 
