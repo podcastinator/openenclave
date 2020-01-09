@@ -39,6 +39,7 @@ add_library(oesyscall STATIC
     netdb.c
     poll.c
     epoll.c
+    errno.c
     raise.c
     select.c
     socket.c
