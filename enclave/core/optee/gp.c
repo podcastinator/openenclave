@@ -213,7 +213,7 @@ static TEE_Result _handle_call_enclave_function(
     }
 
     /* Resolve which ECALL table to use. */
-    if (oe_table_id_equal(&args_ptr->table_id, &zero_table_id))
+    if (oe_table_id_equal(&args.table_id, &zero_table_id))
     {
         ecall_table.ecalls = __oe_ecalls_table;
         ecall_table.num_ecalls = __oe_ecalls_table_size;
@@ -222,7 +222,7 @@ static TEE_Result _handle_call_enclave_function(
     {
         const ecall_table_t* table;
 
-        if (!(table = _lookup_ecall_table(&args_ptr->table_id)))
+        if (!(table = _lookup_ecall_table(&args.table_id)))
             OE_RAISE(OE_NOT_FOUND);
 
         ecall_table.ecalls = table->ecalls;
