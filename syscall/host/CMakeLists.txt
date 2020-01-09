@@ -29,7 +29,7 @@ set(TARGET oesyscallhost)
 
 if(UNIX)
     set(SYSCALL_C "linux/syscall.c")
-elseif(WINDOWS)
+elseif(WIN32)
     set(SYSCALL_C "windows/syscall.c")
 else()
     message(FATAL_ERROR "Unsupported")
