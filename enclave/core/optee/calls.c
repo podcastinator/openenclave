@@ -8,7 +8,7 @@
 #include <openenclave/internal/raise.h>
 
 oe_result_t oe_call_host_function_by_table_id(
-    uint64_t table_id,
+    const oe_table_id_t* table_id,
     uint64_t function_id,
     const void* input_buffer,
     size_t input_buffer_size,
@@ -26,7 +26,7 @@ oe_result_t oe_call_host_function_by_table_id(
 
     /* Initialize the arguments */
     {
-        args.table_id = table_id;
+        args.table_id = *table_id;
         args.function_id = function_id;
         args.input_buffer = input_buffer;
         args.input_buffer_size = input_buffer_size;
@@ -64,8 +64,10 @@ oe_result_t oe_call_host_function(
     size_t output_buffer_size,
     size_t* output_bytes_written)
 {
+    const oe_table_id_t table_id = OE_ZERO_TABLE_ID;
+
     return oe_call_host_function_by_table_id(
-        OE_UINT64_MAX,
+        &table_id,
         function_id,
         input_buffer,
         input_buffer_size,

@@ -109,11 +109,41 @@ static uint32_t __oe_windows_ecall_key = 0;
 
 static TEE_TASessionHandle __oe_rpc_pta_session = TEE_HANDLE_NULL;
 
+/*
+**==============================================================================
+**
+** _lookup_ecall_table()
+**
+** Return the ecall table for the given table id or null if not found.
+**
+**==============================================================================
+*/
+
+static const ecall_table_t* _lookup_ecall_table(const oe_table_id_t* table_id)
+{
+    /* Search for an ECALL table with this table id */
+    for (size_t i = 0; i < OE_MAX_ECALL_TABLES; i++)
+    {
+        ecall_table_t* p = &_ecall_tables[i];
+
+        /* Exit if at the end of used entries. */
+        if (!p->used)
+            return NULL;
+
+        if (oe_table_id_equal(table_id, &p->table_id))
+            return &_ecall_tables[i];
+    }
+
+    /* Not found */
+    return NULL;
+}
+
 static TEE_Result _handle_call_enclave_function(
     uint32_t param_types,
     TEE_Param params[4])
 {
     oe_result_t result = OE_OK;
+    const oe_table_id_t zero_table_id = OE_ZERO_TABLE_ID;
 
     uint32_t pt_os;
     uint32_t pt_inout;
@@ -183,21 +213,23 @@ static TEE_Result _handle_call_enclave_function(
     }
 
     /* Resolve which ECALL table to use. */
-    if (args.table_id == OE_UINT64_MAX)
+    if (oe_table_id_equal(&args_ptr->table_id, &zero_table_id))
     {
         ecall_table.ecalls = __oe_ecalls_table;
         ecall_table.num_ecalls = __oe_ecalls_table_size;
     }
     else
     {
-        if (args.table_id >= OE_MAX_ECALL_TABLES)
-            return TEE_ERROR_ITEM_NOT_FOUND;
+        const ecall_table_t* table;
 
-        ecall_table.ecalls = _ecall_tables[args.table_id].ecalls;
-        ecall_table.num_ecalls = _ecall_tables[args.table_id].num_ecalls;
+        if (!(table = _lookup_ecall_table(&args_ptr->table_id)))
+            OE_RAISE(OE_NOT_FOUND);
+
+        ecall_table.ecalls = table->ecalls;
+        ecall_table.num_ecalls = table->num_ecalls;
 
         if (!ecall_table.ecalls)
-            return TEE_ERROR_ITEM_NOT_FOUND;
+            OE_RAISE(OE_NOT_FOUND);
     }
 
     /* Fetch matching function */
