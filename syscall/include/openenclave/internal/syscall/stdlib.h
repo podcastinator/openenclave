@@ -17,7 +17,7 @@ typedef struct _oe_syscall_path
 
 char* oe_realpath(const char* path, oe_syscall_path_t* resolved_path);
 
-_Noreturn void oe_exit(int status);
+OE_NO_RETURN void oe_exit(int status);
 
 OE_EXTERNC_END
 
