@@ -40,6 +40,12 @@ add_library(${TARGET} STATIC
     tests.c
     ${SYSCALL_C})
 
+if(WIN32)
+    set_target_properties(${TARGET} PROPERTIES
+        #INTERFACE_INCLUDE_DIRECTORIES "${INCPATHS}"
+        IMPORTED_LOCATION $ENV{WINDIR}/System32)
+endif()
+
 maybe_build_using_clangw(${TARGET})
 
 add_dependencies(${TARGET} syscall_untrusted_edl)
