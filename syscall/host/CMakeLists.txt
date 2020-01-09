@@ -27,10 +27,18 @@ add_custom_target(syscall_untrusted_edl
 
 set(TARGET oesyscallhost)
 
+if(UNIX)
+    set(SYSCALL_C "linux/syscall.c")
+elseif(WINDOWS)
+    set(SYSCALL_C "windows/syscall.c")
+else()
+    message(FATAL_ERROR "Unsupported")
+endif()
+
 add_library(${TARGET} STATIC
     syscall_u_wrapper.c
     tests.c
-    linux/syscall.c)
+    ${SYSCALL_C})
 
 maybe_build_using_clangw(${TARGET})
 
