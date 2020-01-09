@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 #include <openenclave/internal/syscall/bits/tests.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 
