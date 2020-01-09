@@ -85,6 +85,35 @@ static void _initialize_enclave_host()
     oe_register_tee_ocall_function_table();
 }
 
+/*
+**==============================================================================
+**
+** _lookup_ocall_table()
+**
+** Return the ocall table for the given table id or null if not found.
+**
+**==============================================================================
+*/
+
+static const ocall_table_t* _lookup_ocall_table(const oe_table_id_t* table_id)
+{
+    /* Search for an OCALL table with this table id */
+    for (size_t i = 0; i < OE_MAX_OCALL_TABLES; i++)
+    {
+        ocall_table_t* p = &_ocall_tables[i];
+
+        /* Exit if at the end of used entries. */
+        if (!p->used)
+            return NULL;
+
+        if (oe_table_id_equal(table_id, &p->table_id))
+            return &_ocall_tables[i];
+    }
+
+    /* Not found */
+    return NULL;
+}
+
 static oe_result_t _handle_call_host_function(
     void* inout_buffer,
     size_t inout_buffer_size,
@@ -95,6 +124,7 @@ static oe_result_t _handle_call_host_function(
     oe_enclave_t* enclave)
 {
     oe_result_t result = OE_OK;
+    static const oe_table_id_t zero_table_id = OE_ZERO_TABLE_ID;
 
     oe_call_host_function_args_t* args_ptr;
 
@@ -114,18 +144,20 @@ static oe_result_t _handle_call_host_function(
         OE_RAISE(OE_INVALID_PARAMETER);
 
     /* Resolve which OCALL table to use. */
-    if (args_ptr->table_id == OE_UINT64_MAX)
+    if (oe_table_id_equal(&args_ptr->table_id, &zero_table_id))
     {
         ocall_table.ocalls = enclave->ocalls;
         ocall_table.num_ocalls = enclave->num_ocalls;
     }
     else
     {
-        if (args_ptr->table_id >= OE_MAX_OCALL_TABLES)
+        const ocall_table_t* table;
+
+        if (!(table = _lookup_ocall_table(&args_ptr->table_id)))
             OE_RAISE(OE_NOT_FOUND);
 
-        ocall_table.ocalls = _ocall_tables[args_ptr->table_id].ocalls;
-        ocall_table.num_ocalls = _ocall_tables[args_ptr->table_id].num_ocalls;
+        ocall_table.ocalls = table->ocalls;
+        ocall_table.num_ocalls = table->num_ocalls;
 
         if (!ocall_table.ocalls)
             OE_RAISE(OE_NOT_FOUND);
