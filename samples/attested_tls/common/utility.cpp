@@ -3,6 +3,7 @@
 
 // clang-format off
 #include <openenclave/enclave.h>
+#include <openenclave/syscall/module.h>
 #include <stdio.h>
 #include "utility.h"
 // clang-format on
