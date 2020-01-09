@@ -139,6 +139,7 @@
 #define OE_ENOTRECOVERABLE 131
 #define OE_ERFKILL         132
 #define OE_EHWPOISON       133
+#define OE_EPROCLIM        134
 // clang-format on
 
 #endif /* _OE_SYSCALL_ERRNO_H */

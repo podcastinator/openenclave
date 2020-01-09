@@ -40,16 +40,6 @@ add_library(${TARGET} STATIC
     tests.c
     ${SYSCALL_C})
 
-#if(WIN32)
-#    set_target_properties(${TARGET} PROPERTIES
-#        #INTERFACE_INCLUDE_DIRECTORIES "${INCPATHS}"
-#        IMPORTED_LOCATION $ENV{WINDIR}/System32)
-#endif()
-
-#target_link_libraries(${TARGET} oehostapp)
-
-#maybe_build_using_clangw(${TARGET})
-
 add_dependencies(${TARGET} syscall_untrusted_edl)
 
 target_include_directories(${TARGET} PRIVATE

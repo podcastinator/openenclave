@@ -9,6 +9,25 @@
 
 OE_EXTERNC_BEGIN
 
+#define OE_EAI_BADFLAGS -1
+#define OE_EAI_NONAME -2
+#define OE_EAI_AGAIN -3
+#define OE_EAI_FAIL -4
+#define OE_EAI_FAMILY -6
+#define OE_EAI_SOCKTYPE -7
+#define OE_EAI_SERVICE -8
+#define OE_EAI_MEMORY -10
+#define OE_EAI_SYSTEM -11
+#define OE_EAI_OVERFLOW -12
+#define OE_EAI_NODATA -5
+#define OE_EAI_ADDRFAMILY -9
+#define OE_EAI_INPROGRESS -100
+#define OE_EAI_CANCELED -101
+#define OE_EAI_NOTCANCELED -102
+#define OE_EAI_ALLDONE -103
+#define OE_EAI_INTR -104
+#define OE_EAI_IDN_ENCODE -105
+
 #define __OE_ADDRINFO oe_addrinfo
 #define __OE_SOCKADDR oe_sockaddr
 #include <openenclave/internal/syscall/bits/addrinfo.h>

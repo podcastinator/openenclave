@@ -10,6 +10,10 @@
 
 OE_EXTERNC_BEGIN
 
+#define OE_STDIN_FILENO 0
+#define OE_STDOUT_FILENO 1
+#define OE_STDERR_FILENO 2
+
 int oe_access(const char* pathname, int mode);
 
 int oe_access_d(uint64_t devid, const char* pathname, int mode);
