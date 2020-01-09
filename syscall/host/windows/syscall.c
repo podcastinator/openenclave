@@ -30,8 +30,7 @@
 #include <openenclave/internal/syscall/fcntl.h>
 #include <openenclave/internal/syscall/dirent.h>
 #include <openenclave/internal/syscall/unistd.h>
-#include "../hostthread.h"
-#include "../../common/oe_host_socket.h"
+#include "../oe_host_socket.h"
 #include "syscall_u.h"
 
 /*
