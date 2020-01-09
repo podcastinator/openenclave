@@ -46,9 +46,9 @@ add_library(${TARGET} STATIC
 #        IMPORTED_LOCATION $ENV{WINDIR}/System32)
 #endif()
 
-target_link_libraries(${TARGET} oehostapp)
+#target_link_libraries(${TARGET} oehostapp)
 
-maybe_build_using_clangw(${TARGET})
+#maybe_build_using_clangw(${TARGET})
 
 add_dependencies(${TARGET} syscall_untrusted_edl)
 
