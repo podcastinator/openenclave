@@ -1,4 +1,4 @@
-: Copyright (c) Open Enclave SDK contributors.
+# Copyright (c) Open Enclave SDK contributors.
 # Licensed under the MIT License.
 
 # Detect C and C++ compiler options
