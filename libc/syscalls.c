@@ -231,8 +231,10 @@ long __syscall(long n, long x1, long x2, long x3, long x4, long x5, long x6)
             return _syscall_writev(n, x1, x2, x3, x4, x5, x6);
         case SYS_ioctl:
             return _syscall_ioctl(n, x1, x2, x3, x4, x5, x6);
+#if defined(SYS_open)
         case SYS_open:
             return _syscall_open(n, x1, x2, x3, x4, x5, x6);
+#endif
         case SYS_close:
             return _syscall_close(n, x1, x2, x3, x4, x5, x6);
         case SYS_mmap:
