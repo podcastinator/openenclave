@@ -9,8 +9,10 @@
 
 OE_EXTERNC_BEGIN
 
-#ifndef oe_syscall_va_list
-#define oe_syscall_va_list __builtin_va_list
+#if defined(_MSC_VER)
+typedef char* oe_syscall_va_list;
+#elif defined(__linux__)
+typedef __builtin_va_list oe_syscall_va_list;
 #endif
 
 typedef enum _oe_syscall_log_level
