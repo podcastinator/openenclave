@@ -61,12 +61,13 @@ static bool _check_claims(const oe_claim_t* claims, size_t claims_length)
 
 static void _test_and_register_attester()
 {
+    printf("====== running _test_and_register_attester\n");
+
     oe_uuid_t* format_ids = NULL;
     size_t format_ids_length1 = 0;
     size_t format_ids_length2 = 0;
     oe_result_t result = OE_FAILURE;
 
-    printf("====== running _test_and_register_attester\n");
     result =
         oe_get_registered_attester_format_ids(&format_ids, &format_ids_length1);
     oe_free_format_ids(format_ids);
@@ -102,12 +103,13 @@ static void _test_and_register_attester()
 
 static void _test_and_register_verifier()
 {
+    printf("====== running _test_and_register_verifier\n");
+
     oe_uuid_t* format_ids = NULL;
     size_t format_ids_length1 = 0;
     size_t format_ids_length2 = 0;
     oe_result_t result = OE_FAILURE;
 
-    printf("====== running _test_and_register_verifier\n");
     result =
         oe_get_registered_verifier_format_ids(&format_ids, &format_ids_length1);
     oe_free_format_ids(format_ids);
@@ -143,12 +145,13 @@ static void _test_and_register_verifier()
 
 static void _test_and_unregister_attester()
 {
+    printf("====== running _test_and_unregister_attester\n");
+
     oe_uuid_t* format_ids = NULL;
     size_t format_ids_length1 = 0;
     size_t format_ids_length2 = 0;
     oe_result_t result = OE_FAILURE;
 
-    printf("====== running _test_and_unregister_attester\n");
     OE_TEST(
         oe_get_registered_attester_format_ids(
             &format_ids, &format_ids_length1) == OE_OK);
@@ -171,12 +174,13 @@ static void _test_and_unregister_attester()
 
 static void _test_and_unregister_verifier()
 {
+    printf("====== running _test_and_unregister_verifier\n");
+
     oe_uuid_t* format_ids = NULL;
     size_t format_ids_length1 = 0;
     size_t format_ids_length2 = 0;
     oe_result_t result = OE_FAILURE;
 
-    printf("====== running _test_and_unregister_verifier\n");
     OE_TEST(
         oe_get_registered_verifier_format_ids(
             &format_ids, &format_ids_length1) == OE_OK);
