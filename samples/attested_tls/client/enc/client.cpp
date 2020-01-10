@@ -10,6 +10,7 @@
 #include <mbedtls/platform.h>
 #include <mbedtls/ssl.h>
 #include <openenclave/enclave.h>
+#include <openenclave/syscall/module.h>
 #include <string.h>
 #include "../../common/utility.h"
 
