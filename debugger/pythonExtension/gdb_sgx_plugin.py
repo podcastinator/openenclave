@@ -81,7 +81,7 @@ class oe_debug_enclave_t:
 TD_OFFSET_FROM_TCS =  0X5000
 
 # This constant definition must align with TD structure in internal\sgxtypes.h.
-TD_CALLSITE_OFFSET = 0XD8
+TD_CALLSITE_OFFSET = 0XF0
 
 # This constant definition must align with Callsite structure in enclave\td.h.
 CALLSITE_OCALLCONTEXT_OFFSET = 0X40

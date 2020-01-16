@@ -516,19 +516,18 @@ OE_CHECK_SIZE(OE_OFFSETOF(sgx_tcs_t, u.entry), 72);
 
 typedef struct _oe_thread_data oe_thread_data_t;
 
+/* Note: unused fields have a "__" prefix */
 struct _oe_thread_data
 {
-    /*==================================*/
-    /* Part 1: ABI-specific definitions */
-    /*==================================*/
-
-    /* Address of this structure: first address in the FS segment (%FS:0). */
+    /* Points to start of this structure */
     uint64_t self_addr;
+
+    /* The last stack pointer (set by enclave when making an OCALL) */
+    uint64_t last_sp;
 
     uint64_t padding0;
     uint64_t padding1;
     uint64_t padding2;
-    uint64_t padding3;
 
     /* Here the name and offset of stack_guard complies to the properties of
        stack_guard defined in tcbhead_t(Struct for Thread Control Block). In
@@ -537,20 +536,18 @@ struct _oe_thread_data
      */
     uint64_t stack_guard; /* The offset is 0x28 for x64 */
 
-    uint64_t padding4;
+    uint64_t padding3;
 
-    /*=============================================*/
-    /* Part 2: implementation-specific definitions */
-    /*=============================================*/
-
-    /* Address of the last stack pointer value */
-    uint64_t last_sp;
-
-    /* The frame size of the set-asside area (SSA) */
     uint64_t ssa_frame_size;
+
+    uint64_t padding4;
 
     /* The thread implementation puts threads on wait queues. */
     oe_thread_data_t* next;
+
+    uint64_t padding5;
+    uint64_t padding6;
+    uint64_t padding7;
 
     uint64_t cxx_thread_info[6];
 
@@ -560,7 +557,7 @@ struct _oe_thread_data
     uint64_t exception_address;
 };
 
-OE_CHECK_SIZE(sizeof(oe_thread_data_t), 144);
+OE_CHECK_SIZE(sizeof(oe_thread_data_t), 168);
 OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, stack_guard) == 0x28);
 
 oe_thread_data_t* oe_get_thread_data(void);
@@ -579,7 +576,7 @@ oe_thread_data_t* oe_get_thread_data(void);
 
 #define OE_THREAD_LOCAL_SPACE (OE_PAGE_SIZE)
 
-#define OE_THREAD_SPECIFIC_DATA_SIZE (3864)
+#define OE_THREAD_SPECIFIC_DATA_SIZE (3840)
 
 typedef struct _callsite Callsite;
 
