@@ -299,6 +299,7 @@ function Install-ZipTool {
     }
 
     New-Item -ItemType "Directory" -Path $InstallDirectory
+    #TODo - Remove hard code, seems like the 7-zip installation is funky atm.
     Set-Alias 7zip "C:\Program Files\7-Zip\7z.exe"
     7zip x $ZipPath -o"$InstallDirectory" -y
 
@@ -648,7 +649,8 @@ try {
     Install-VisualStudio
     Install-OpenSSL
     Install-LLVM
-    Install-Git
+    # Outdated and breaks stuff
+    # Install-Git
     Install-Shellcheck
 
     if ($LaunchConfiguration -ne "SGX1FLC-NoDriver")
