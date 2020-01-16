@@ -299,7 +299,7 @@ function Install-ZipTool {
     }
     New-Item -ItemType "Directory" -Path $InstallDirectory
     Write-Host "Here : 7z.exe x $ZipPath "
-    7z.exe x $ZipPath -o"$InstallDirectory" -y
+    &'.\Program Files\7-Zip\7z.exe' x $ZipPath -o"$InstallDirectory" -y
     if($LASTEXITCODE) {
         Throw "ERROR: Failed to extract $ZipPath to $InstallDirectory"
     }
