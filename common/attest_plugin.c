@@ -208,10 +208,12 @@ static oe_result_t _get_registered_plugin_format_ids(
     size_t number_of_nodes = 0;
     oe_uuid_t* ids = NULL;
 
-    if (!format_ids || !format_ids_length)
+    if (!format_ids_length)
         OE_RAISE(OE_INVALID_PARAMETER);
 
-    *format_ids = NULL;
+    if (format_ids != NULL)
+        *format_ids = NULL;
+
     *format_ids_length = 0;
 
     if (!list)
@@ -224,28 +226,31 @@ static oe_result_t _get_registered_plugin_format_ids(
         number_of_nodes++;
         node = node->next;
     }
-
-    // Allocate memory
-    ids = (oe_uuid_t*)oe_calloc(number_of_nodes, sizeof(oe_uuid_t));
-    if (ids == NULL)
-    {
-        OE_RAISE_MSG(
-            OE_OUT_OF_MEMORY,
-            "Out of memory while getting registered plugins.",
-            NULL);
-    }
-
-    // Copy format ids
-    node = list;
-    for (size_t n = 0; n < number_of_nodes; n++)
-    {
-        memcpy(&ids[n], &node->plugin->format_id, sizeof(oe_uuid_t));
-        node = node->next;
-    }
-
-    *format_ids = ids;
     *format_ids_length = number_of_nodes;
-    ids = NULL;
+
+    if (format_ids != NULL)
+    {
+        // Allocate memory
+        ids = (oe_uuid_t*)oe_calloc(number_of_nodes, sizeof(oe_uuid_t));
+        if (ids == NULL)
+        {
+            OE_RAISE_MSG(
+                OE_OUT_OF_MEMORY,
+                "Out of memory while getting registered plugins.",
+                NULL);
+        }
+
+        // Copy format ids
+        node = list;
+        for (size_t n = 0; n < number_of_nodes; n++)
+        {
+            memcpy(&ids[n], &node->plugin->format_id, sizeof(oe_uuid_t));
+            node = node->next;
+        }
+
+        *format_ids = ids;
+        ids = NULL;
+    }
 
     result = OE_OK;
 

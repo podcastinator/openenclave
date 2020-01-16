@@ -87,6 +87,8 @@ Likewise, if the plugin is registered for the host side, it will only work for t
 host side. If the user wants to use the plugin for both sides, then they must register
 it once inside the enclave and once inside the host.
 
+The UUIDs of the registered attesters or verifiers can be queried by calling `oe_get_registered_[attester|verifier]_format_ids`. By default, there will be no registered attester or verifier when the aplication starts. Before calling "plugin aware" APIs, at least one attester or verifier plugin has to be registered.
+
 ### Attester Plugin API (Enclave only)
 
 Each plugin must implement the functions below:
@@ -957,6 +959,9 @@ struct my_plugin_attester_config_data_t config = { ... };
 size_t config_size = sizeof(config);
 oe_register_attester(my_plugin_attester(), &config, config_size);
 
+/* Receive the evidence format ids that the verifier supports */
+recv(VERIFIER_SOCKET_FD, evidence_format_ids, evidence_format_id_length, 0);
+
 /* Create input params struct if needed. */
 struct my_plugin_attester_opt_params_t params = { ... };
 size_t params_size = sizeof(params);
@@ -965,18 +970,17 @@ size_t params_size = sizeof(params);
 oe_claim_t claims = { ... };
 size_t claims_size = ...;
 
-/* Receive the evidence format ids that the verifier supports */
-recv(VERIFIER_SOCKET_FD, evidence_format_ids, evidence_format_id_length, 0);
-
 /* Get registered attester format ids and find a common format */
 oe_get_registered_attester_format_ids(*format_ids, &format_ids_length);
 for (size_t m = 0; m < format_ids_length; m++)
 {
     for (size_t n = 0; n < evidence_format_id_length; n++)
-    if (format_ids[m] == evidence_format_ids[n])
     {
-        common_format_id = format_ids[m];
-        break;
+        if (format_ids[m] == evidence_format_ids[n])
+        {
+            common_format_id = format_ids[m];
+            break;
+        }
     }
 }
 

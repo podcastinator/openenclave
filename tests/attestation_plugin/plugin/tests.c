@@ -68,10 +68,7 @@ static void _test_and_register_attester()
     size_t format_ids_length2 = 0;
     oe_result_t result = OE_FAILURE;
 
-    result =
-        oe_get_registered_attester_format_ids(&format_ids, &format_ids_length1);
-    oe_free_format_ids(format_ids);
-    format_ids = NULL;
+    result = oe_get_registered_attester_format_ids(NULL, &format_ids_length1);
     OE_TEST(result == OE_OK || result == OE_NOT_FOUND);
 
     OE_TEST(oe_register_attester(&mock_attester1, NULL, 0) == OE_OK);
@@ -110,10 +107,7 @@ static void _test_and_register_verifier()
     size_t format_ids_length2 = 0;
     oe_result_t result = OE_FAILURE;
 
-    result =
-        oe_get_registered_verifier_format_ids(&format_ids, &format_ids_length1);
-    oe_free_format_ids(format_ids);
-    format_ids = NULL;
+    result = oe_get_registered_verifier_format_ids(NULL, &format_ids_length1);
     OE_TEST(result == OE_OK || result == OE_NOT_FOUND);
 
     OE_TEST(oe_register_verifier(&mock_verifier1, NULL, 0) == OE_OK);
