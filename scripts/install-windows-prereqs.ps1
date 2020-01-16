@@ -298,17 +298,9 @@ function Install-ZipTool {
         return
     }
 
-    $7zipExecPath = "${env:ProgramFiles(x86)}\7-Zip\7z.exe"
-
-    if (-not (Test-Path -Path $7zipExecPath -PathType Leaf)) {
-        throw "7 zip file '$7zipExecPath' not found"
-    }
     New-Item -ItemType "Directory" -Path $InstallDirectory
-
-    Set-Alias 7zip $7zipExecPath
-
     7z.exe x $ZipPath -o"$InstallDirectory" -y
-
+    
     if($LASTEXITCODE) {
         Throw "ERROR: Failed to extract $ZipPath to $InstallDirectory"
     }
