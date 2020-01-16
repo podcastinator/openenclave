@@ -670,7 +670,7 @@ try {
 
     Install-DCAP-Dependencies
     # Install-Node has to be executed after Install-DCAP-Dependencies because it removes existing $InstallPath directory
-    Install-Node
+    # Install-Node
     Install-VCRuntime
 
     Write-Output 'Please reboot your computer for the configuration to complete.'
