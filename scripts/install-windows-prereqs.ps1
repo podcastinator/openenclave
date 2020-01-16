@@ -298,7 +298,7 @@ function Install-ZipTool {
         return
     }
 
-    $7zipExecPath = "$env:ProgramFiles\7-Zip\7z.exe"
+    $7zipExecPath = "${env:ProgramFiles(x86)}\7-Zip\7z.exe"
 
     if (-not (Test-Path -Path $7zipExecPath -PathType Leaf)) {
         throw "7 zip file '$7zipExecPath' not found"
