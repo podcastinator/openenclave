@@ -25,7 +25,7 @@
 
 /* Offsets into td_t structure */
 #define td_self_addr 0
-#define td_last_sp 8
+#define td_last_sp 56
 #define td_magic 168
 #define td_depth (td_magic + 8)
 #define td_host_rcx (td_depth + 8)

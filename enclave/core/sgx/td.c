@@ -22,6 +22,7 @@
 
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, magic) == td_magic);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, depth) == td_depth);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, last_sp) == td_last_sp);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, host_rcx) == td_host_rcx);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, host_rsp) == td_host_rsp);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, host_rbp) == td_host_rbp);
