@@ -56,8 +56,7 @@ OE_STATIC_ASSERT(sizeof(oe_ocall_context_t) == (2 * sizeof(uintptr_t)));
 
 oe_thread_data_t* oe_get_thread_data()
 {
-    td_t* td = oe_get_td();
-    return &(td->base);
+    return oe_get_td();
 }
 
 /*
@@ -174,7 +173,7 @@ td_t* oe_get_td()
 **     initialized td_t meets the following conditions:
 **
 **         (1) td is not null
-**         (2) td->base.self_addr == td
+**         (2) td->self_addr == td
 **         (3) td->magic == TD_MAGIC
 **
 **==============================================================================
@@ -182,7 +181,7 @@ td_t* oe_get_td()
 
 bool td_initialized(td_t* td)
 {
-    if (td && td->magic == TD_MAGIC && td->base.self_addr == (uint64_t)td)
+    if (td && td->magic == TD_MAGIC && td->self_addr == (uint64_t)td)
         return true;
 
     return false;

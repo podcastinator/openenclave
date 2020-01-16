@@ -90,17 +90,22 @@ void td_init(td_t* td)
         // td_t.hostsp, td_t.hostbp, and td_t.retaddr already set by
         // oe_enter().
 
-        /* Clear base structure */
-        memset(&td->base, 0, sizeof(td->base));
-
         /* Set pointer to self */
-        td->base.self_addr = (uint64_t)td;
+        td->self_addr = (uint64_t)td;
 
         /* initialize the stack_guard at %%fs:0x28 with a random number.
         oe_rdrand is a warpper of rdrand. rdrand is a hardware-implemented
         Pseudo Random Generator, and it is repeatedly seeeded by a high entropy
         source. */
-        td->base.stack_guard = oe_rdrand();
+        td->stack_guard = oe_rdrand();
+
+        td->last_sp = 0;
+        td->ssa_frame_size = 0;
+        td->next = NULL;
+        memset(td->cxx_thread_info, 0, sizeof(td->cxx_thread_info));
+        td->exception_code = 0;
+        td->exception_flags = 0;
+        td->exception_address = 0;
 
         /* Set the magic number */
         td->magic = TD_MAGIC;
@@ -151,8 +156,16 @@ void td_clear(td_t* td)
     if (td->depth != 0 || td->callsites != NULL)
         oe_abort();
 
-    /* Clear base structure */
-    memset(&td->base, 0, sizeof(td->base));
+    /* Clear select fields */
+    td->self_addr = 0;
+    td->stack_guard = 0;
+    td->last_sp = 0;
+    td->ssa_frame_size = 0;
+    td->next = NULL;
+    memset(td->cxx_thread_info, 0, sizeof(td->cxx_thread_info));
+    td->exception_code = 0;
+    td->exception_flags = 0;
+    td->exception_address = 0;
 
     /* Clear the magic number */
     td->magic = 0;

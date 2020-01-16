@@ -514,7 +514,15 @@ OE_CHECK_SIZE(OE_OFFSETOF(sgx_tcs_t, u.entry), 72);
 **==============================================================================
 */
 
+#define TD_MAGIC 0xc90afe906c5d19a3
+
+#define OE_THREAD_LOCAL_SPACE (OE_PAGE_SIZE)
+
+#define OE_THREAD_SPECIFIC_DATA_SIZE (3840)
+
 typedef struct _oe_thread_data oe_thread_data_t;
+
+typedef struct _callsite Callsite;
 
 struct _oe_thread_data
 {
@@ -562,42 +570,6 @@ struct _oe_thread_data
     uint64_t padding5;
     uint64_t padding6;
     uint64_t padding7;
-};
-
-OE_CHECK_SIZE(sizeof(oe_thread_data_t), 168);
-OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, stack_guard) == 0x28);
-
-oe_thread_data_t* oe_get_thread_data(void);
-
-/*
-**==============================================================================
-**
-** td_t
-**
-**     Extended thread data
-**
-**==============================================================================
-*/
-
-#define TD_MAGIC 0xc90afe906c5d19a3
-
-#define OE_THREAD_LOCAL_SPACE (OE_PAGE_SIZE)
-
-#define OE_THREAD_SPECIFIC_DATA_SIZE (3840)
-
-typedef struct _callsite Callsite;
-
-/* Thread specific TLS atexit call parameters */
-typedef struct _oe_tls_atexit
-{
-    void (*destructor)(void*);
-    void* object;
-} oe_tls_atexit_t;
-
-OE_PACK_BEGIN
-typedef struct _td
-{
-    oe_thread_data_t base;
 
     /* A "magic number" for sanity checking (TD_MAGIC) */
     uint64_t magic;
@@ -626,10 +598,21 @@ typedef struct _td
 
     /* Reserved for thread specific data. */
     uint8_t thread_specific_data[OE_THREAD_SPECIFIC_DATA_SIZE];
-} td_t;
-OE_PACK_END
+};
 
-OE_CHECK_SIZE(sizeof(td_t), 4096);
+OE_CHECK_SIZE(sizeof(oe_thread_data_t), 4096);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, stack_guard) == 0x28);
+
+oe_thread_data_t* oe_get_thread_data(void);
+
+/* Thread specific TLS atexit call parameters */
+typedef struct _oe_tls_atexit
+{
+    void (*destructor)(void*);
+    void* object;
+} oe_tls_atexit_t;
+
+typedef oe_thread_data_t td_t;
 
 /* Get the thread data object for the current thread */
 td_t* oe_get_td(void);

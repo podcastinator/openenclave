@@ -170,7 +170,7 @@ typedef struct _ssa_info
 static int _get_enclave_thread_first_ssa_info(td_t* td, SSA_Info* ssa_info)
 {
     sgx_tcs_t* tcs = (sgx_tcs_t*)td_to_tcs(td);
-    uint64_t ssa_frame_size = td->base.ssa_frame_size;
+    uint64_t ssa_frame_size = td->ssa_frame_size;
     if (ssa_frame_size == 0)
     {
         ssa_frame_size = OE_DEFAULT_SSA_FRAME_SIZE;
@@ -245,15 +245,15 @@ void oe_real_exception_dispatcher(oe_context_t* oe_context)
     td_t* td = oe_get_td();
 
     // Change the rip of oe_context to the real exception address.
-    oe_context->rip = td->base.exception_address;
+    oe_context->rip = td->exception_address;
 
     // Compose the oe_exception_record_t.
     // N.B. In second pass exception handling, the XSTATE is recovered by SGX
     // hardware correctly on ERESUME, so we don't touch the XSTATE.
     oe_exception_record_t oe_exception_record = {0};
-    oe_exception_record.code = td->base.exception_code;
-    oe_exception_record.flags = td->base.exception_flags;
-    oe_exception_record.address = td->base.exception_address;
+    oe_exception_record.code = td->exception_code;
+    oe_exception_record.flags = td->exception_flags;
+    oe_exception_record.address = td->exception_address;
     oe_exception_record.context = oe_context;
 
     // Traverse the existing exception handlers, stop when
@@ -333,31 +333,31 @@ void oe_virtual_exception_dispatcher(
     }
 
     // Get the exception address, code, and flags.
-    td->base.exception_address = ssa_gpr->rip;
-    td->base.exception_code = OE_EXCEPTION_UNKNOWN;
+    td->exception_address = ssa_gpr->rip;
+    td->exception_code = OE_EXCEPTION_UNKNOWN;
     for (uint32_t i = 0; i < OE_COUNTOF(g_vector_to_exception_code_mapping);
          i++)
     {
         if (g_vector_to_exception_code_mapping[i].sgx_vector ==
             ssa_gpr->exit_info.as_fields.vector)
         {
-            td->base.exception_code =
+            td->exception_code =
                 g_vector_to_exception_code_mapping[i].exception_code;
             break;
         }
     }
 
-    td->base.exception_flags = 0;
+    td->exception_flags = 0;
     if (ssa_gpr->exit_info.as_fields.exit_type == SGX_EXIT_TYPE_HARDWARE)
     {
-        td->base.exception_flags |= OE_EXCEPTION_FLAGS_HARDWARE;
+        td->exception_flags |= OE_EXCEPTION_FLAGS_HARDWARE;
     }
     else if (ssa_gpr->exit_info.as_fields.exit_type == SGX_EXIT_TYPE_SOFTWARE)
     {
-        td->base.exception_flags |= OE_EXCEPTION_FLAGS_SOFTWARE;
+        td->exception_flags |= OE_EXCEPTION_FLAGS_SOFTWARE;
     }
 
-    if (td->base.exception_code == OE_EXCEPTION_ILLEGAL_INSTRUCTION &&
+    if (td->exception_code == OE_EXCEPTION_ILLEGAL_INSTRUCTION &&
         _emulate_illegal_instruction(ssa_gpr) == 0)
     {
         // Restore the RBP & RSP as required by return from EENTER
