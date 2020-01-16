@@ -546,15 +546,11 @@ struct _oe_thread_data
     /* The last stack pointer (set by enclave when making an OCALL) */
     uint64_t last_sp;
 
-    /* The size of the set-asside area frame. */
+    /* The size of the set-asside area (SSA) frame. */
     uint64_t ssa_frame_size;
 
     /* The thread implementation puts threads on wait queues. */
     oe_thread_data_t* next;
-
-    uint64_t padding5;
-    uint64_t padding6;
-    uint64_t padding7;
 
     uint64_t cxx_thread_info[6];
 
@@ -562,6 +558,10 @@ struct _oe_thread_data
     uint32_t exception_code;
     uint32_t exception_flags;
     uint64_t exception_address;
+
+    uint64_t padding5;
+    uint64_t padding6;
+    uint64_t padding7;
 };
 
 OE_CHECK_SIZE(sizeof(oe_thread_data_t), 168);
