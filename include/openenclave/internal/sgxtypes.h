@@ -516,18 +516,19 @@ OE_CHECK_SIZE(OE_OFFSETOF(sgx_tcs_t, u.entry), 72);
 
 typedef struct _oe_thread_data oe_thread_data_t;
 
-/* Note: unused fields have a "__" prefix */
 struct _oe_thread_data
 {
-    /* Points to start of this structure */
-    uint64_t self_addr;
+    /*==========================*/
+    /* ABI-specific definitions */
+    /*==========================*/
 
-    /* The last stack pointer (set by enclave when making an OCALL) */
-    uint64_t last_sp;
+    /* Contains the address of this structure. */
+    uint64_t self_addr;
 
     uint64_t padding0;
     uint64_t padding1;
     uint64_t padding2;
+    uint64_t padding3;
 
     /* Here the name and offset of stack_guard complies to the properties of
        stack_guard defined in tcbhead_t(Struct for Thread Control Block). In
@@ -536,11 +537,17 @@ struct _oe_thread_data
      */
     uint64_t stack_guard; /* The offset is 0x28 for x64 */
 
-    uint64_t padding3;
-
-    uint64_t ssa_frame_size;
-
     uint64_t padding4;
+
+    /*=====================================*/
+    /* implementation-specific definitions */
+    /*=====================================*/
+
+    /* The last stack pointer (set by enclave when making an OCALL) */
+    uint64_t last_sp;
+
+    /* The size of the set-asside area frame. */
+    uint64_t ssa_frame_size;
 
     /* The thread implementation puts threads on wait queues. */
     oe_thread_data_t* next;
