@@ -170,7 +170,7 @@ typedef struct _ssa_info
 static int _get_enclave_thread_first_ssa_info(td_t* td, SSA_Info* ssa_info)
 {
     sgx_tcs_t* tcs = (sgx_tcs_t*)td_to_tcs(td);
-    uint64_t ssa_frame_size = td->base.__ssa_frame_size;
+    uint64_t ssa_frame_size = td->base.ssa_frame_size;
     if (ssa_frame_size == 0)
     {
         ssa_frame_size = OE_DEFAULT_SSA_FRAME_SIZE;

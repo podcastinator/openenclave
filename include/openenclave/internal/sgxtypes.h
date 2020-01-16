@@ -516,45 +516,54 @@ OE_CHECK_SIZE(OE_OFFSETOF(sgx_tcs_t, u.entry), 72);
 
 typedef struct _oe_thread_data oe_thread_data_t;
 
-/* Note: unused fields have a "__" prefix */
 struct _oe_thread_data
 {
-    /* Points to start of this structure */
+    /*==================================*/
+    /* Part 1: ABI-specific definitions */
+    /*==================================*/
+
+    /* Address of this structure: first address in the FS segment (%FS:0). */
     uint64_t self_addr;
 
-    /* The last stack pointer (set by enclave when making an OCALL) */
-    uint64_t last_sp;
+    uint64_t padding0;
+    uint64_t padding1;
+    uint64_t padding2;
+    uint64_t padding3;
 
-    uint64_t __stack_base_addr;
-    uint64_t __stack_limit_addr;
-    uint64_t __first_ssa_gpr;
     /* Here the name and offset of stack_guard complies to the properties of
        stack_guard defined in tcbhead_t(Struct for Thread Control Block). In
        this way we can make use of the compiler's support of stack smashing
        protector.
      */
     uint64_t stack_guard; /* The offset is 0x28 for x64 */
-    uint64_t __reserved_0;
-    uint64_t __ssa_frame_size;
-    uint64_t __last_error;
 
-    /* The threads implementations uses this to put threads on queues */
+    uint64_t padding4;
+
+    /*=============================================*/
+    /* Part 2: implementation-specific definitions */
+    /*=============================================*/
+
+    /* The frame size of the set-asside area (SSA) */
+    uint64_t ssa_frame_size;
+
+    /* The thread implementation puts threads on wait queues. */
     oe_thread_data_t* next;
 
-    uint64_t __tls_addr;
-    uint64_t __tls_array;
-    uint64_t __exception_flag; /* number of exceptions being handled */
-    uint64_t __cxx_thread_info[6];
+    uint64_t cxx_thread_info[6];
 
-    // The exception code.
+    /* State about the current enclave exception (if any) */
     uint32_t exception_code;
-    // The exception flags.
     uint32_t exception_flags;
-    // The rip when exception happened.
     uint64_t exception_address;
+
+    uint64_t padding5;
+    uint64_t padding6;
+    uint64_t padding7;
+    uint64_t padding8;
 };
 
 OE_CHECK_SIZE(sizeof(oe_thread_data_t), 168);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, stack_guard) == 0x28);
 
 oe_thread_data_t* oe_get_thread_data(void);
 

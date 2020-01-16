@@ -187,7 +187,7 @@ static int _get_enclave_ssa_frame_size(
         return -1;
     }
 
-    *ssa_frame_size = oe_thread_data.__ssa_frame_size;
+    *ssa_frame_size = oe_thread_data.ssa_frame_size;
     if (*ssa_frame_size == 0)
     {
         *ssa_frame_size = OE_DEFAULT_SSA_FRAME_SIZE;

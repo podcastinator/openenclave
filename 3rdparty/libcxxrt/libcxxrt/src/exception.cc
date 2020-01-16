@@ -399,7 +399,7 @@ static void init_key(void)
 static __cxa_thread_info *thread_info()
 {
     oe_thread_data_t* td = oe_get_thread_data();
-    return (__cxa_thread_info*) td->__cxx_thread_info;
+    return (__cxa_thread_info*) td->cxx_thread_info;
 }
 /**
  * Fast version of thread_info().  May fail if thread_info() is not called on
@@ -408,7 +408,7 @@ static __cxa_thread_info *thread_info()
 static __cxa_thread_info *thread_info_fast()
 {
     oe_thread_data_t* td = oe_get_thread_data();
-    return (__cxa_thread_info*) td->__cxx_thread_info;
+    return (__cxa_thread_info*) td->cxx_thread_info;
 }
 /**
  * ABI function returning the __cxa_eh_globals structure.

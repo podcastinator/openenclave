@@ -15,8 +15,6 @@
 #define ECHO
 #endif
 
-uint64_t prev;
-
 void TestECall(oe_enclave_t* enclave)
 {
     oe_result_t result;
@@ -55,8 +53,6 @@ void TestECall(oe_enclave_t* enclave)
 
     printf("last_sp=%llx\n", OE_LLX(args.thread_data.last_sp));
 #endif
-
-    prev = args.thread_data.last_sp;
 }
 
 int main(int argc, const char* argv[])
