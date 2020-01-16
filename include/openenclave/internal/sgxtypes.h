@@ -543,6 +543,9 @@ struct _oe_thread_data
     /* Part 2: implementation-specific definitions */
     /*=============================================*/
 
+    /* Address of the last stack pointer value */
+    uint64_t last_sp;
+
     /* The frame size of the set-asside area (SSA) */
     uint64_t ssa_frame_size;
 
@@ -555,14 +558,9 @@ struct _oe_thread_data
     uint32_t exception_code;
     uint32_t exception_flags;
     uint64_t exception_address;
-
-    uint64_t padding5;
-    uint64_t padding6;
-    uint64_t padding7;
-    uint64_t padding8;
 };
 
-OE_CHECK_SIZE(sizeof(oe_thread_data_t), 168);
+OE_CHECK_SIZE(sizeof(oe_thread_data_t), 144);
 OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, stack_guard) == 0x28);
 
 oe_thread_data_t* oe_get_thread_data(void);
@@ -581,7 +579,7 @@ oe_thread_data_t* oe_get_thread_data(void);
 
 #define OE_THREAD_LOCAL_SPACE (OE_PAGE_SIZE)
 
-#define OE_THREAD_SPECIFIC_DATA_SIZE (3840)
+#define OE_THREAD_SPECIFIC_DATA_SIZE (3864)
 
 typedef struct _callsite Callsite;
 
