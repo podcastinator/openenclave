@@ -533,10 +533,15 @@ struct _oe_thread_data
     /* Contains the address of this structure. */
     uint64_t self_addr;
 
-    uint64_t padding0;
-    uint64_t padding1;
-    uint64_t padding2;
-    uint64_t padding3;
+    /* Unused ABI field: dynamic thread vector (points to TLS entries) */
+    uint64_t unused_dtv;
+
+    /* Reserved ABI fields (MUSL uses these to put threads on a list). */
+    uint64_t reserved1;
+    uint64_t reserved2;
+
+    /* Unused ABI field */
+    uint64_t unused_sysinfo;
 
     /* Here the name and offset of stack_guard complies to the properties of
        stack_guard defined in tcbhead_t(Struct for Thread Control Block). In
@@ -545,7 +550,8 @@ struct _oe_thread_data
      */
     uint64_t stack_guard; /* The offset is 0x28 for x64 */
 
-    uint64_t padding4;
+    /* Unused ABI field */
+    uint64_t unused_pointer_guard;
 
     /*=====================================*/
     /* implementation-specific definitions */
@@ -567,9 +573,9 @@ struct _oe_thread_data
     uint32_t exception_flags;
     uint64_t exception_address;
 
-    uint64_t padding5;
-    uint64_t padding6;
-    uint64_t padding7;
+    uint64_t padding1;
+    uint64_t padding2;
+    uint64_t padding3;
 
     /* A "magic number" for sanity checking (TD_MAGIC) */
     uint64_t magic;
