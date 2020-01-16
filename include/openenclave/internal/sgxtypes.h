@@ -518,7 +518,7 @@ OE_CHECK_SIZE(OE_OFFSETOF(sgx_tcs_t, u.entry), 72);
 
 #define OE_THREAD_LOCAL_SPACE (OE_PAGE_SIZE)
 
-#define OE_THREAD_SPECIFIC_DATA_SIZE (3840)
+#define OE_THREAD_SPECIFIC_DATA_SIZE (3584)
 
 typedef struct _oe_thread_data oe_thread_data_t;
 
@@ -552,6 +552,12 @@ struct _oe_thread_data
 
     /* Unused ABI field */
     uint64_t unused_pointer_guard;
+
+    /*==============================*/
+    /* reserved for pthread struct. */
+    /*==============================*/
+
+    uint8_t reserved[256];
 
     /*=====================================*/
     /* implementation-specific definitions */
