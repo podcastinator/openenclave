@@ -297,9 +297,17 @@ function Install-ZipTool {
         Add-ToSystemPath -Path $EnvironmentPath
         return
     }
+
+    $7zipExecPath = "$env:ProgramFiles\7-Zip\7z.exe"
+
+    if (-not (Test-Path -Path $7zipPath -PathType Leaf)) {
+        throw "7 zip file '$7zipPath' not found"
+    }
     New-Item -ItemType "Directory" -Path $InstallDirectory
-    Write-Host "Here : 7z.exe x $ZipPath "
-    &'.\Program Files\7-Zip\7z.exe' x $ZipPath -o"$InstallDirectory" -y
+
+    Set-Alias 7zip $7zipPath
+    7z.exe x $ZipPath -o"$InstallDirectory" -y
+    
     if($LASTEXITCODE) {
         Throw "ERROR: Failed to extract $ZipPath to $InstallDirectory"
     }
