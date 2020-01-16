@@ -518,7 +518,7 @@ OE_CHECK_SIZE(OE_OFFSETOF(sgx_tcs_t, u.entry), 72);
 
 #define OE_THREAD_LOCAL_SPACE (OE_PAGE_SIZE)
 
-#define OE_THREAD_SPECIFIC_DATA_SIZE (3584)
+#define OE_THREAD_SPECIFIC_DATA_SIZE (3584 + 24 + 56)
 
 typedef struct _oe_thread_data oe_thread_data_t;
 
@@ -557,11 +557,14 @@ struct _oe_thread_data
     /* reserved for pthread struct. */
     /*==============================*/
 
-    uint8_t reserved[256];
+    uint8_t reserved[200];
 
     /*=====================================*/
     /* implementation-specific definitions */
     /*=====================================*/
+
+    /* A "magic number" for sanity checking (TD_MAGIC) */
+    uint64_t magic;
 
     /* The last stack pointer (set by enclave when making an OCALL) */
     uint64_t last_sp;
@@ -578,13 +581,6 @@ struct _oe_thread_data
     uint32_t exception_code;
     uint32_t exception_flags;
     uint64_t exception_address;
-
-    uint64_t padding1;
-    uint64_t padding2;
-    uint64_t padding3;
-
-    /* A "magic number" for sanity checking (TD_MAGIC) */
-    uint64_t magic;
 
     /* Depth of ECALL stack (zero indicates that it is unwound) */
     uint64_t depth;
@@ -612,8 +608,40 @@ struct _oe_thread_data
     uint8_t thread_specific_data[OE_THREAD_SPECIFIC_DATA_SIZE];
 };
 
-OE_CHECK_SIZE(sizeof(oe_thread_data_t), 4096);
-OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, stack_guard) == 0x28);
+OE_STATIC_ASSERT(sizeof(oe_thread_data_t) == 4096);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, self_addr) == 0);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, unused_dtv) == 8);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, reserved1) == 16);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, reserved2) == 24);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, unused_sysinfo) == 32);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, stack_guard) == 40);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, unused_pointer_guard) == 48);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, reserved) == 56);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, magic) == 256);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, last_sp) == 264);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, ssa_frame_size) == 272);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, next) == 280);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, cxx_thread_info) == 288);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, exception_code) == 336);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, exception_flags) == 340);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, exception_address) == 344);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, depth) == 352);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, host_rcx) == 360);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, host_rsp) == 368);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, host_rbp) == 376);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, host_previous_rsp) == 384);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, host_previous_rbp) == 392);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, oret_func) == 400);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, oret_result) == 402);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, padding) == 404);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, oret_arg) == 408);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, callsites) == 416);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, simulate) == 424);
+OE_STATIC_ASSERT(OE_OFFSETOF(oe_thread_data_t, thread_specific_data) == 432);
+OE_STATIC_ASSERT(
+    OE_OFFSETOF(oe_thread_data_t, thread_specific_data) +
+        OE_THREAD_SPECIFIC_DATA_SIZE ==
+    sizeof(oe_thread_data_t));
 
 oe_thread_data_t* oe_get_thread_data(void);
 

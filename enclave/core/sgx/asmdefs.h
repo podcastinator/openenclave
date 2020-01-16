@@ -23,20 +23,35 @@
 #define OE_ARG_FLAG_GS 0x0001
 #endif
 
-/* Offsets into td_t structure */
-#define td_self_addr 0
-#define td_last_sp (312)
-#define td_magic (424)
-#define td_depth (td_magic + 8)
-#define td_host_rcx (td_depth + 8)
-#define td_host_rsp (td_host_rcx + 8)
-#define td_host_rbp (td_host_rsp + 8)
-#define td_host_previous_rsp (td_host_rbp + 8)
-#define td_host_previous_rbp (td_host_previous_rsp + 8)
-#define td_oret_func (td_host_previous_rbp + 8)
-#define td_oret_arg (td_oret_func + 8)
-#define td_callsites (td_oret_arg + 8)
-#define td_simulate (td_callsites + 8)
+/* Offsets into oe_thread_data_t structure */
+#define td_self_addr (0)
+#define td_unused_dtv (8)
+#define td_reserved1 (16)
+#define td_reserved2 (24)
+#define td_unused_sysinfo (32)
+#define td_stack_guard (40)
+#define td_unused_pointer_guard (48)
+#define td_magic (256)
+#define td_last_sp (264)
+#define td_ssa_frame_size (272)
+#define td_next (280)
+#define td_cxx_thread_info (288)
+#define td_exception_code (336)
+#define td_exception_flags (340)
+#define td_exception_address (344)
+#define td_depth (352)
+#define td_host_rcx (360)
+#define td_host_rsp (368)
+#define td_host_rbp (376)
+#define td_host_previous_rsp (384)
+#define td_host_previous_rbp (392)
+#define td_oret_func (400)
+#define td_oret_result (402)
+#define td_padding (404)
+#define td_oret_arg (408)
+#define td_callsites (416)
+#define td_simulate (424)
+#define td_thread_specific_data (432)
 
 #define oe_exit_enclave __morestack
 #ifndef __ASSEMBLER__

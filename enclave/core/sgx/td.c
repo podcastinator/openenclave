@@ -20,23 +20,41 @@
 
 #define TD_FROM_TCS (5 * OE_PAGE_SIZE)
 
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, self_addr) == td_self_addr);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, unused_dtv) == td_unused_dtv);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, reserved1) == td_reserved1);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, reserved2) == td_reserved2);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, unused_sysinfo) == td_unused_sysinfo);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, stack_guard) == td_stack_guard);
+OE_STATIC_ASSERT(
+    OE_OFFSETOF(td_t, unused_pointer_guard) == td_unused_pointer_guard);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, magic) == td_magic);
-OE_STATIC_ASSERT(OE_OFFSETOF(td_t, depth) == td_depth);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, last_sp) == td_last_sp);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, ssa_frame_size) == td_ssa_frame_size);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, next) == td_next);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, cxx_thread_info) == td_cxx_thread_info);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, exception_code) == td_exception_code);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, exception_flags) == td_exception_flags);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, exception_address) == td_exception_address);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, depth) == td_depth);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, host_rcx) == td_host_rcx);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, host_rsp) == td_host_rsp);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, host_rbp) == td_host_rbp);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, host_previous_rsp) == td_host_previous_rsp);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, host_previous_rbp) == td_host_previous_rbp);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, oret_func) == td_oret_func);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, oret_result) == td_oret_result);
+OE_STATIC_ASSERT(OE_OFFSETOF(td_t, padding) == td_padding);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, oret_arg) == td_oret_arg);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, callsites) == td_callsites);
 OE_STATIC_ASSERT(OE_OFFSETOF(td_t, simulate) == td_simulate);
+OE_STATIC_ASSERT(
+    OE_OFFSETOF(td_t, thread_specific_data) == td_thread_specific_data);
 
 // Static asserts for consistency with
 // debugger/pythonExtension/gdb_sgx_plugin.py
 #if defined(__linux__)
-OE_STATIC_ASSERT(td_callsites == 0x1f0);
+OE_STATIC_ASSERT(td_callsites == 0x1a0);
 OE_STATIC_ASSERT(OE_OFFSETOF(Callsite, ocall_context) == 0x40);
 OE_STATIC_ASSERT(TD_FROM_TCS == 0x5000);
 OE_STATIC_ASSERT(sizeof(oe_ocall_context_t) == (2 * sizeof(uintptr_t)));
