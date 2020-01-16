@@ -25,7 +25,7 @@ Param(
     [string]$DevconURL = 'https://download.microsoft.com/download/7/D/D/7DD48DE6-8BDA-47C0-854A-539A800FAA90/wdk/Installers/787bee96dbd26371076b37b13c405890.cab',
     [string]$DevconHash = 'A38E409617FC89D0BA1224C31E42AF4344013FEA046D2248E4B9E03F67D5908A',
     [string]$IntelDCAPURL = 'http://registrationcenter-download.intel.com/akdlm/irc_nas/16014/Intel%20SGX%20DCAP%20for%20Windows%20v1.4.100.4.exe',
-    [string]$IntelDCAPHash = '27C1CC7F8434A704853FC3BFE15723F6F507CB09BF79B248A09A9ED0EED48A01',
+    [string]$IntelDCAPHash = '7DAA87B9E687012183BB2E1D984CB1F877D45CCB07700155F9C44FB9B58EAAAF',
     [string]$VCRuntime2012URL = 'https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe',
     [string]$VCRuntime2012Hash = '681BE3E5BA9FD3DA02C09D7E565ADFA078640ED66A0D58583EFAD2C1E3CC4064',
     [string]$AzureDCAPNupkgURL = 'https://www.nuget.org/api/v2/package/Azure.DCAP.Windows/0.0.3',
