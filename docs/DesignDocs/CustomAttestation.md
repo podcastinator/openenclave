@@ -87,7 +87,10 @@ Likewise, if the plugin is registered for the host side, it will only work for t
 host side. If the user wants to use the plugin for both sides, then they must register
 it once inside the enclave and once inside the host.
 
-The UUIDs of the registered attesters or verifiers can be queried by calling `oe_get_registered_[attester|verifier]_format_ids`. By default, there will be no registered attester or verifier when the aplication starts. Before calling "plugin aware" APIs, at least one attester or verifier plugin has to be registered.
+The UUIDs of the registered attesters or verifiers can be queried by calling
+`oe_get_registered_[attester|verifier]_format_ids`. By default, there will be no registered
+attester or verifier when the aplication starts. Before calling "plugin aware" APIs,
+at least one attester or verifier plugin has to be registered.
 
 ### Attester Plugin API (Enclave only)
 
