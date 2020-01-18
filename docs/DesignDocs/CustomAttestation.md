@@ -87,6 +87,11 @@ Likewise, if the plugin is registered for the host side, it will only work for t
 host side. If the user wants to use the plugin for both sides, then they must register
 it once inside the enclave and once inside the host.
 
+The UUIDs of the registered attesters or verifiers can be queried by calling
+`oe_get_registered_[attester|verifier]_format_ids`. By default, there will be no registered
+attester or verifier when the aplication starts. Before calling "plugin aware" APIs,
+at least one attester or verifier plugin has to be registered.
+
 ### Attester Plugin API (Enclave only)
 
 Each plugin must implement the functions below:
@@ -743,6 +748,44 @@ oe_result_t oe_verify_evidence(
  * @retval OE_OK on success.
  */
 oe_result_t oe_free_claims_list(oe_claim_t* claims, size_t claims_length);
+
+/**
+ * oe_get_registered_attester_format_ids
+ *
+ * Get the unique identifiers of all registered attesters.
+ *
+ * @param[out] format_ids The list of the UUIDs of the registered attesters.
+ * @param[out] format_ids_length The length of the UUIDs list.
+ * @retval OE_OK on success.
+ * @retval OE_NOT_FOUND There is no registered attester.
+ */
+oe_result_t oe_get_registered_attester_format_ids(
+    oe_uuid_t** format_ids,
+    size_t* format_ids_length);
+
+/**
+ * oe_get_registered_verifier_format_ids
+ *
+ * Get the unique identifiers of all registered verifiers.
+ *
+ * @param[out] format_ids The list of the UUIDs of the registered verifiers.
+ * @param[out] format_ids_length The length of the UUIDs list.
+ * @retval OE_OK on success.
+ * @retval OE_NOT_FOUND There is no registered verifier.
+ */
+oe_result_t oe_get_registered_verifier_format_ids(
+    oe_uuid_t** format_ids,
+    size_t* format_ids_length);
+
+/**
+ * oe_free_format_ids
+ *
+ * Frees the attester/verifier format ids.
+ *
+ * @param[in] format_ids The list of the attester/verifier UUIDs.
+ * @retval OE_OK on success.
+ */
+oe_result_t oe_free_format_ids(oe_uuid_t* format_ids);
 ```
 
 The outputs returned by `oe_get_evidence` will begin with the header
@@ -919,6 +962,9 @@ struct my_plugin_attester_config_data_t config = { ... };
 size_t config_size = sizeof(config);
 oe_register_attester(my_plugin_attester(), &config, config_size);
 
+/* Receive the evidence format ids that the verifier supports */
+recv(VERIFIER_SOCKET_FD, evidence_format_ids, evidence_format_id_length, 0);
+
 /* Create input params struct if needed. */
 struct my_plugin_attester_opt_params_t params = { ... };
 size_t params_size = sizeof(params);
@@ -927,9 +973,23 @@ size_t params_size = sizeof(params);
 oe_claim_t claims = { ... };
 size_t claims_size = ...;
 
+/* Get registered attester format ids and find a common format */
+oe_get_registered_attester_format_ids(*format_ids, &format_ids_length);
+for (size_t m = 0; m < format_ids_length; m++)
+{
+    for (size_t n = 0; n < evidence_format_id_length; n++)
+    {
+        if (format_ids[m] == evidence_format_ids[n])
+        {
+            common_format_id = format_ids[m];
+            break;
+        }
+    }
+}
+
 /* Get evidence. */
 oe_get_evidence(
-    MY_PLUGIN_UUID,
+    common_format_id,
     OE_EVIDENCE_FLAGS_REMOTE_ATTESTATION,
     claims,
     claims_size,
@@ -945,6 +1005,7 @@ send(VERIFIER_SOCKET_FD, evidence, evidence_size, 0);
 send(VERIFIER_SOCKET_FD, endorsements, endorsements_size, 0);
 
 /* Free data and unregister plugin. */
+oe_free_format_id(format_ids);
 oe_free_evidence(evidence, endorsements);
 oe_unregister_attester(my_plugin_attester());
 ```
@@ -960,6 +1021,10 @@ The verifier, which can either be the enclave or the host, can verify the eviden
 struct my_plugin_verifier_config_data_t config = { ... };
 size_t config_size = sizeof(config);
 oe_register_verifier(my_plugin_verifier(), &config, config_size);
+
+/* Tell enclave the format ids the verifier supports */
+oe_get_registered_verifier_format_ids(*format_ids, &format_ids_length);
+send(ENCLAVE_SOCKET_FD, *format_ids, format_ids_length, 0);
 
 /* Receive evidence and endorsement buffer from enclave. */
 recv(ENCLAVE_SOCKET_FD, evidence, evidence_size, 0);
@@ -985,6 +1050,7 @@ oe_verify_evidence(
     &claims_size);
 
 /* Free data and unregister plugin. */
+oe_free_format_id(format_ids);
 oe_free_claims_list(claims, claims_size);
 oe_unregister_verifier(my_plugin_verifier());
 ```

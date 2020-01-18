@@ -62,6 +62,15 @@ static bool _check_claims(const oe_claim_t* claims, size_t claims_length)
 static void _test_and_register_attester()
 {
     printf("====== running _test_and_register_attester\n");
+
+    oe_uuid_t* format_ids = NULL;
+    size_t format_ids_length1 = 0;
+    size_t format_ids_length2 = 0;
+    oe_result_t result = OE_FAILURE;
+
+    result = oe_get_registered_attester_format_ids(NULL, &format_ids_length1);
+    OE_TEST(result == OE_OK || result == OE_NOT_FOUND);
+
     OE_TEST(oe_register_attester(&mock_attester1, NULL, 0) == OE_OK);
     OE_TEST(
         oe_register_attester(&mock_attester1, NULL, 0) == OE_ALREADY_EXISTS);
@@ -70,11 +79,37 @@ static void _test_and_register_attester()
         oe_register_attester(&mock_attester1, NULL, 0) == OE_ALREADY_EXISTS);
     OE_TEST(
         oe_register_attester(&mock_attester2, NULL, 0) == OE_ALREADY_EXISTS);
+
+    OE_TEST(
+        oe_get_registered_attester_format_ids(
+            &format_ids, &format_ids_length2) == OE_OK);
+    OE_TEST(format_ids_length1 == (format_ids_length2 - 2));
+    OE_TEST(
+        memcmp(
+            &format_ids[0],
+            &mock_attester2.base.format_id,
+            sizeof(oe_uuid_t)) == 0);
+    OE_TEST(
+        memcmp(
+            &format_ids[1],
+            &mock_attester1.base.format_id,
+            sizeof(oe_uuid_t)) == 0);
+    oe_free_format_ids(format_ids);
+    format_ids = NULL;
 }
 
 static void _test_and_register_verifier()
 {
     printf("====== running _test_and_register_verifier\n");
+
+    oe_uuid_t* format_ids = NULL;
+    size_t format_ids_length1 = 0;
+    size_t format_ids_length2 = 0;
+    oe_result_t result = OE_FAILURE;
+
+    result = oe_get_registered_verifier_format_ids(NULL, &format_ids_length1);
+    OE_TEST(result == OE_OK || result == OE_NOT_FOUND);
+
     OE_TEST(oe_register_verifier(&mock_verifier1, NULL, 0) == OE_OK);
     OE_TEST(
         oe_register_verifier(&mock_verifier1, NULL, 0) == OE_ALREADY_EXISTS);
@@ -83,26 +118,81 @@ static void _test_and_register_verifier()
         oe_register_verifier(&mock_verifier1, NULL, 0) == OE_ALREADY_EXISTS);
     OE_TEST(
         oe_register_verifier(&mock_verifier2, NULL, 0) == OE_ALREADY_EXISTS);
+
+    OE_TEST(
+        oe_get_registered_verifier_format_ids(
+            &format_ids, &format_ids_length2) == OE_OK);
+    OE_TEST(format_ids_length1 == (format_ids_length2 - 2));
+    OE_TEST(
+        memcmp(
+            &format_ids[0],
+            &mock_verifier2.base.format_id,
+            sizeof(oe_uuid_t)) == 0);
+    OE_TEST(
+        memcmp(
+            &format_ids[1],
+            &mock_verifier1.base.format_id,
+            sizeof(oe_uuid_t)) == 0);
+    oe_free_format_ids(format_ids);
+    format_ids = NULL;
 }
 
 static void _test_and_unregister_attester()
 {
     printf("====== running _test_and_unregister_attester\n");
+
+    oe_uuid_t* format_ids = NULL;
+    size_t format_ids_length1 = 0;
+    size_t format_ids_length2 = 0;
+    oe_result_t result = OE_FAILURE;
+
+    OE_TEST(
+        oe_get_registered_attester_format_ids(
+            &format_ids, &format_ids_length1) == OE_OK);
+    oe_free_format_ids(format_ids);
+    format_ids = NULL;
+
     OE_TEST(oe_unregister_attester(&mock_attester1) == OE_OK);
     OE_TEST(oe_unregister_attester(&mock_attester1) == OE_NOT_FOUND);
     OE_TEST(oe_unregister_attester(&mock_attester2) == OE_OK);
     OE_TEST(oe_unregister_attester(&mock_attester1) == OE_NOT_FOUND);
     OE_TEST(oe_unregister_attester(&mock_attester2) == OE_NOT_FOUND);
+
+    result =
+        oe_get_registered_attester_format_ids(&format_ids, &format_ids_length2);
+    OE_TEST(result == OE_OK || result == OE_NOT_FOUND);
+    OE_TEST(format_ids_length1 == (format_ids_length2 + 2));
+    oe_free_format_ids(format_ids);
+    format_ids = NULL;
 }
 
 static void _test_and_unregister_verifier()
 {
     printf("====== running _test_and_unregister_verifier\n");
+
+    oe_uuid_t* format_ids = NULL;
+    size_t format_ids_length1 = 0;
+    size_t format_ids_length2 = 0;
+    oe_result_t result = OE_FAILURE;
+
+    OE_TEST(
+        oe_get_registered_verifier_format_ids(
+            &format_ids, &format_ids_length1) == OE_OK);
+    oe_free_format_ids(format_ids);
+    format_ids = NULL;
+
     OE_TEST(oe_unregister_verifier(&mock_verifier1) == OE_OK);
     OE_TEST(oe_unregister_verifier(&mock_verifier1) == OE_NOT_FOUND);
     OE_TEST(oe_unregister_verifier(&mock_verifier2) == OE_OK);
     OE_TEST(oe_unregister_verifier(&mock_verifier1) == OE_NOT_FOUND);
     OE_TEST(oe_unregister_verifier(&mock_verifier2) == OE_NOT_FOUND);
+
+    result =
+        oe_get_registered_verifier_format_ids(&format_ids, &format_ids_length2);
+    OE_TEST(result == OE_OK || result == OE_NOT_FOUND);
+    OE_TEST(format_ids_length1 == (format_ids_length2 + 2));
+    oe_free_format_ids(format_ids);
+    format_ids = NULL;
 }
 
 static void _test_evidence_success(
@@ -318,8 +408,30 @@ void test_runtime()
 
 void register_verifier()
 {
+    oe_uuid_t* format_ids = NULL;
+    size_t format_ids_length1 = 0;
+    size_t format_ids_length2 = 0;
+    oe_result_t result = OE_FAILURE;
+
+    result =
+        oe_get_registered_verifier_format_ids(&format_ids, &format_ids_length1);
+    oe_free_format_ids(format_ids);
+    format_ids = NULL;
+    OE_TEST(result == OE_OK || result == OE_NOT_FOUND);
+
     sgx_verify = oe_sgx_plugin_verifier();
     OE_TEST(oe_register_verifier(sgx_verify, NULL, 0) == OE_OK);
+
+    OE_TEST(
+        oe_get_registered_verifier_format_ids(
+            &format_ids, &format_ids_length2) == OE_OK);
+    OE_TEST(format_ids_length1 == (format_ids_length2 - 1));
+    OE_TEST(
+        memcmp(
+            &format_ids[0], &sgx_verify->base.format_id, sizeof(oe_uuid_t)) ==
+        0);
+    oe_free_format_ids(format_ids);
+    format_ids = NULL;
 }
 
 void unregister_verifier()
